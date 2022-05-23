@@ -36,7 +36,8 @@ class TweetController extends Controller
             'content' => 'required|string|min:4',
         ]);
 
-        $tweet = Tweet::create($request->all());
+        $tweet = Tweet::create($request->all(),
+        );
         return response()->json([
             'success' => true,
             'message' => 'Tweet created successfully.',
@@ -111,7 +112,9 @@ class TweetController extends Controller
      * */
     public function show($id)
     {
-        $tweet = Tweet::find($id);
+        $tweet = Tweet::with(['tweets', 'user'])
+            ->withCount('tweets')
+            ->find($id);
 
         if (!$tweet) {
             return response()->json([
