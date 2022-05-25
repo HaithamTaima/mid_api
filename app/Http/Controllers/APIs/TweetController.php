@@ -29,13 +29,20 @@ class TweetController extends Controller
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
      **/
+//    public function store(Request $request)
+//    {
+//        $tweet= $request->input('content');
+//        $tweet_id = $request->input('user_id');
+//
+//        if(Auth::check)
+//    }
+//gjgjkjgkjgkbjkll
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',
+
             'content' => 'required|string|min:4',
         ]);
-
         $tweet = Tweet::create($request->all(),
         );
         return response()->json([
@@ -44,6 +51,7 @@ class TweetController extends Controller
             'data' => new TweetResource($tweet)
         ], 200);
     }
+
 
 
     /**
