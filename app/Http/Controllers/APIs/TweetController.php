@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Tweet;
 use App\Http\Resources\TweetResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TweetController extends Controller
 {
@@ -15,7 +16,10 @@ class TweetController extends Controller
      **/
     public function index()
     {
-        $tweets = TweetResource::collection(Tweet::paginate(request()->per_page, ['*'], 'page', request()->page));
+        $tweets = TweetResource::collection(
+            Tweet::paginate(request()
+            ->per_page, ['*'], 'page', request()->page)
+        );
         return response()->json([
             'success' => true,
             'message' => 'Tweets list.',
@@ -37,14 +41,30 @@ class TweetController extends Controller
 //        if(Auth::check)
 //    }
 //gjgjkjgkjgkbjkll
+
+//    public function store(Request $request)
+//    {
+//        $request->validate([
+//            'user_id' => 'required|exists:users,id',
+//            'content' => 'required|string|min:4',
+//        ]);
+//
+//        $tweet = Tweet::create($request->all());
+//        return response()->json([
+//            'success' => true,
+//            'message' => 'Tweet created successfully.',
+//            'data' => new TweetResource($tweet)
+//        ], 200);
+//    }
     public function store(Request $request)
     {
         $request->validate([
-
+            'user_id' => 'required|exists:users,id',
             'content' => 'required|string|min:4',
         ]);
-        $tweet = Tweet::create($request->all(),
-        );
+
+        $tweet = Tweet::create($request->all(),);
+        $user_id = Auth::id();
         return response()->json([
             'success' => true,
             'message' => 'Tweet created successfully.',
@@ -118,11 +138,10 @@ class TweetController extends Controller
      * @return \Illuminate\Http\Response
      * @throws \Exception
      * */
+
     public function show($id)
     {
-        $tweet = Tweet::with(['tweets', 'user'])
-            ->withCount('tweets')
-            ->find($id);
+        $tweet = Tweet::find($id);
 
         if (!$tweet) {
             return response()->json([
@@ -137,4 +156,24 @@ class TweetController extends Controller
             'data' => new TweetResource($tweet)
         ], 200);
     }
+//    public function show($id)
+//    {
+//        $tweet = Tweet::with(['tweets', 'user'])
+//            ->withCount('tweets')
+//            ->find($id);
+//
+//        if (!$tweet) {
+//            return response()->json([
+//                'success' => false,
+//                'message' => 'Tweet not found.'
+//            ], 404);
+//        }
+//
+//        return response()->json([
+//            'success' => true,
+//            'message' => 'Tweet detail.',
+//            'data' => new TweetResource($tweet)
+//        ], 200);
+//    }
+
 }
