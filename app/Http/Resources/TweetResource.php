@@ -15,6 +15,7 @@ class TweetResource extends JsonResource
             'user_name' => $this->user->name,
             'content' => $this->content,
             'created_at' => (string) $this->created_at,
+
         ];
     }
 }

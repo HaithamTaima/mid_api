@@ -23,7 +23,10 @@ class User extends Authenticatable
         'email',
         'password',
     ];
-
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'user_like', 'user_id', 'like_id');
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

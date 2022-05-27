@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\APIs;
 
 use App\Http\Controllers\Controller;
+use App\Models\Like;
 use App\Models\Tweet;
 use App\Http\Resources\TweetResource;
 use Illuminate\Http\Request;
+use  App\Http\Controllers\APIs\LikeController;
 use Illuminate\Support\Facades\Auth;
 
 class TweetController extends Controller
@@ -142,7 +144,7 @@ class TweetController extends Controller
     public function show($id)
     {
         $tweet = Tweet::find($id);
-
+        $like=like::all();
         if (!$tweet) {
             return response()->json([
                 'success' => false,
@@ -153,7 +155,8 @@ class TweetController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Tweet detail.',
-            'data' => new TweetResource($tweet)
+            'data' => new TweetResource($tweet),
+            'like'=>like::all()
         ], 200);
     }
 //    public function show($id)
