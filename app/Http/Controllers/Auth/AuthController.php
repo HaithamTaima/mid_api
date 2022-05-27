@@ -25,7 +25,7 @@ class AuthController extends Controller
         ]);
 
         $data['password'] = bcrypt($request->password);
-        $data['active'] = 0;
+
         $user = User::create($data);
 
         $token = $user->createToken('API Token')->accessToken;
@@ -50,40 +50,6 @@ class AuthController extends Controller
         return response()->json(['user' => auth()->user(), 'token' => $token]);
     }
 
-    /**
-     * Access method to authenticate.
-     *
-     * @return json
-     */
-    public function userDetail()
-    {
-        return response()->json([
-            'success' => true,
-            'message' => 'Data fetched successfully.',
-            'data' => auth()->user()
-        ], 200);
-    }
 
-    /**
-     * Logout user.
-     *
-     * @return json
-     */
-    public function logout()
-    {
-        $access_token = auth()->user()->token();
 
-        // logout from only current device
-        $tokenRepository = app(TokenRepository::class);
-        $tokenRepository->revokeAccessToken($access_token->id);
-
-        // use this method to logout from all devices
-        // $refreshTokenRepository = app(RefreshTokenRepository::class);
-        // $refreshTokenRepository->revokeRefreshTokensByAccessTokenId($$access_token->id);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'User logout successfully.'
-        ], 200);
-    }
 }

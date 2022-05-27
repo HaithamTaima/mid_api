@@ -16,9 +16,8 @@ class CreateUserLikeTable extends Migration
         Schema::create('user_like', function (Blueprint $table) {
             $table->unsignedBigInteger('tweet_id');
             $table->unsignedBigInteger('user_id');
-            $table->foreign('tweet_id')->references('id')->on('tweets')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');;
-
+            $table->foreign('tweet_id')->references('id')->on('tweets')->onDelete('cascade');
         });
     }
 

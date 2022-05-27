@@ -6,9 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
+    public function index() {
+        return response()->json(['users'=>DB::table('users')->get()]);
+    }
+
     public function show($id)
     {
         $user = User::find($id);
@@ -60,7 +66,7 @@ class UserController extends Controller
                 'message' => 'User not found.'
             ], 404);
         }
-        
+
         $user->update($input);
 
         return response()->json([
@@ -68,5 +74,12 @@ class UserController extends Controller
             'message' => 'User updated successfully.',
             'data' => new UserResource($user)
         ], 200);
+    }
+
+    public function profile($id)
+    {
+        $user = User::with('tweet')->find($id);
+        return response()->json(['data' => $user ]);
+
     }
 }
